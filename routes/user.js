@@ -28,12 +28,6 @@ router.post('/add-user', (req, res) => {
 
 
 
-
-
-
-
-
-
 router.post('/login', (req, res, next) => {
     passport.authenticate('local', (err, user, info) => {
         if (user) {
@@ -43,20 +37,19 @@ router.post('/login', (req, res, next) => {
                 }
                 const returnUser = {
                     id: user._id,
-                    username: user.username,
-                    useremail: user.useremail,
-                    company: user.company,
-                    is_email_verified: user.is_email_verified,
-                    is_company_added: user.is_company_added
+                    firstname: user.firstname,
+                    lastname: user.lastname,
+                    email: user.email
                 }
                 const token = jwt.sign(JSON.stringify(returnUser), "123");
-                Users.findByIdAndUpdate(user._id, {
-                    $push: {
-                        tokens: token
-                    }
-                }, {
-                        new: true
-                    })
+                req.session.user = user._id
+                // Users.findByIdAndUpdate(user._id, {
+                //     $push: {
+                //         tokens: token
+                //     }
+                // }, {
+                //         new: true
+                //     })
                 return res.status(200).json({ token });
             })
         } else {

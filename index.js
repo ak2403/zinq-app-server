@@ -9,7 +9,7 @@ const session = require('express-session')
 const passport = require('passport');
 const MongoStore = require('connect-mongo')(session);
 require('./routes/auth')(passport)
-// const ProtectedCheck = require('./routes/protectedCheck')
+const ProtectedCheck = require('./routes/protected_route')
 const user_route = require('./routes/user')
 
 const app = express()
@@ -23,12 +23,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: true}));
 
 app.use(session({
-    genid: req => {
-        return uuid()
-    },
     secret: 'secret',
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     // store: new MongoStore({
     //     url: process.env.MONGO_URI,
     //     autoReconnect: true
@@ -37,7 +34,7 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/users', user_route)
+app.use('/users', ProtectedCheck, user_route)
 
 app.listen('5000', () => {
     console.log('server running now...')

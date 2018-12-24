@@ -9,7 +9,6 @@ module.exports = function (passport) {
         usernameField: 'email',
         passwordField: 'password'
     }, (email, password, done) => {
-        console.log(email, password)
         return Users.findOne({ email: email })
             .then(findRes => {
                 if (_.isEmpty(findRes)) {
