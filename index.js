@@ -2,12 +2,11 @@ const express = require('express')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const uuid = require('uuid')
 require('dotenv').config({ path: 'variables.env' })
 const Users = require('./models/user')
 const session = require('express-session')
 const passport = require('passport');
-const MongoStore = require('connect-mongo')(session);
+// const MongoStore = require('connect-mongo')(session);
 require('./routes/auth')(passport)
 const ProtectedCheck = require('./routes/protected_route')
 const user_route = require('./routes/user')
