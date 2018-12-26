@@ -35,6 +35,6 @@ app.use(passport.session());
 
 app.use('/users', ProtectedCheck, user_route)
 
-app.listen('5000', () => {
+app.listen(process.env.PORT || '5000', () => {
     console.log('server running now...')
 });
