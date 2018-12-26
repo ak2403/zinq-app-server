@@ -78,29 +78,13 @@ userSchema.statics.addUser = function (req) {
     })
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+userSchema.statics.getUser = function(userID){
+    return new Promise((resolve, reject)=>{
+        this.findById(userID, 'firstname lastname email phone', function(err, user){
+            resolve(user)
+        })      
+    })
+}
 
 const userModel = mongoose.model('users', userSchema);
 module.exports = userModel;

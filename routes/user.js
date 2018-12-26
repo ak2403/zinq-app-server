@@ -19,6 +19,14 @@ router.post('/add-user', (req, res) => {
 
 });
 
+router.get('/:userID', (req, res) => {
+    return Users.getUser(req.params.userID)
+        .then(response => {
+            console.log(response)
+            res.status(200).json(response)
+        })
+})
+
 
 
 
