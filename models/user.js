@@ -70,7 +70,7 @@ userSchema.statics.addUser = function (req) {
                     })
             }else{
                 const error_obj = {
-                    error: 'Email already in use'
+                    message: 'Email already in use'
                 }
                 reject(error_obj)
             }
