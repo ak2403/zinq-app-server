@@ -22,8 +22,19 @@ router.post('/add-user', (req, res) => {
 router.get('/:userID', (req, res) => {
     return Users.getUser(req.params.userID)
         .then(response => {
-            console.log(response)
             res.status(200).json(response)
+        })
+})
+
+router.post('/:userID', (req, res) => {
+    let edit_data = req.body
+    delete edit_data['_id']
+    return Users.editUser(req.params.userID, edit_data)
+        .then(response => {
+            res.status(200).json(response)
+        })
+        .catch(err => {
+            res.status(400).json(err)
         })
 })
 

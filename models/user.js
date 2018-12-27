@@ -78,6 +78,17 @@ userSchema.statics.addUser = function (req) {
     })
 }
 
+userSchema.statics.editUser = function(userID, data){
+    return new Promise((resolve, reject) => {
+        this.findByIdAndUpdate(userID, data, {new:true}, function(err, user){
+            if(err){
+                reject(err)
+            }
+            resolve(user)
+        })
+    })
+}
+
 userSchema.statics.getUser = function(userID){
     return new Promise((resolve, reject)=>{
         this.findById(userID, 'firstname lastname email phone', function(err, user){
