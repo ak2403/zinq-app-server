@@ -21,6 +21,10 @@ const userSchema = new schema({
     },
     phone: {
         type: Number
+    },
+    is_activated: {
+        type: Boolean,
+        default: true
     }
 });
 
@@ -61,7 +65,8 @@ userSchema.statics.addUser = function (req) {
                             firstname: user.firstname,
                             lastname: user.lastname,
                             phone: user.phone,
-                            email: user.email
+                            email: user.email,
+                            is_activated: user.is_activated
                         }
                         resolve(returnUser)
                     })
@@ -91,7 +96,7 @@ userSchema.statics.editUser = function(userID, data){
 
 userSchema.statics.getUser = function(userID){
     return new Promise((resolve, reject)=>{
-        this.findById(userID, 'firstname lastname email phone', function(err, user){
+        this.findById(userID, 'firstname lastname email phone is_activated', function(err, user){
             resolve(user)
         })      
     })
