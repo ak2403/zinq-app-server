@@ -23,6 +23,7 @@
     "express": "*",
     "body-parser": "*",
     "jsonwebtoken": "^8.3.0",
+    "mongoose": "*",
     "lodash": "^4.17.11",
     "nodemon": "^1.17.5",
     "connect-mongo": "^2.0.3",
