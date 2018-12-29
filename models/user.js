@@ -23,8 +23,8 @@ const userSchema = new schema({
         type: Number
     },
     is_activated: {
-        type: String,
-        default: "yes"
+        type: Boolean,
+        default: true
     }
 });
 
