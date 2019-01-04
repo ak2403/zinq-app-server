@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 const _ = require('lodash')
 const schema = mongoose.Schema;
 
@@ -21,6 +22,10 @@ const userSchema = new schema({
     },
     phone: {
         type: Number
+    },
+    source: {
+        type: String,
+        default: 'self'
     },
     is_activated: {
         type: Boolean,
@@ -47,16 +52,16 @@ const handleError = err => {
 }
 
 userSchema.statics.addUser = function (req) {
-    return new Promise((resolve, reject)=>{
+    return new Promise((resolve, reject) => {
         this.findOne({
             email: req.email
         }, (err, user) => {
-            if(err){
+            if (err) {
                 console.log("64")
                 console.log(err)
             }
 
-            if(!user){
+            if (!user) {
                 const newUser = new this(req)
                 newUser.save()
                     .then(user => {
@@ -73,7 +78,7 @@ userSchema.statics.addUser = function (req) {
                     .catch(err => {
                         reject(handleError(err))
                     })
-            }else{
+            } else {
                 const error_obj = {
                     message: 'Email already in use'
                 }
@@ -83,10 +88,58 @@ userSchema.statics.addUser = function (req) {
     })
 }
 
-userSchema.statics.editUser = function(userID, data){
+userSchema.statics.authGoogle = function (data) {
     return new Promise((resolve, reject) => {
-        this.findByIdAndUpdate(userID, data, {new:true}, function(err, user){
-            if(err){
+        this.findOne({
+            email: data.email
+        }, (err, user) => {
+            if (err) {
+                console.log('err : ', err)
+            }
+            if (!user) {
+                data['is_activated'] = true
+                data['password'] = 'itsshouldberewriten'
+                const newUser = new this(data)
+                newUser.save()
+                    .then(user => {
+                        const returnUser = {
+                            id: user._id,
+                            firstname: user.firstname,
+                            lastname: user.lastname,
+                            email: user.email,
+                        }
+                        const token = jwt.sign(JSON.stringify(returnUser), "123");
+                        resolve(token)
+                    })
+                    .catch(err => {
+                        reject(handleError(err))
+                    })
+            }
+            if (user) {
+                if (user.source === 'self') {
+                    reject({
+                        message: 'Already registered through email'
+                    })
+                }else if(user.source === 'google'){
+                    const returnUser = {
+                        id: user._id,
+                        firstname: user.firstname,
+                        lastname: user.lastname,
+                        email: user.email
+                    }
+                    const token = jwt.sign(JSON.stringify(returnUser), "123");
+                    resolve(token)
+                }
+            }
+
+        })
+    })
+}
+
+userSchema.statics.editUser = function (userID, data) {
+    return new Promise((resolve, reject) => {
+        this.findByIdAndUpdate(userID, data, { new: true }, function (err, user) {
+            if (err) {
                 reject(err)
             }
             resolve(user)
@@ -94,11 +147,11 @@ userSchema.statics.editUser = function(userID, data){
     })
 }
 
-userSchema.statics.getUser = function(userID){
-    return new Promise((resolve, reject)=>{
-        this.findById(userID, 'firstname lastname email phone is_activated', function(err, user){
+userSchema.statics.getUser = function (userID) {
+    return new Promise((resolve, reject) => {
+        this.findById(userID, 'firstname lastname email phone is_activated', function (err, user) {
             resolve(user)
-        })      
+        })
     })
 }
 

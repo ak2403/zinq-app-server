@@ -19,17 +19,18 @@
     "nodemon": "^1.17.5"
   },
   "dependencies": {
-    "express": "*",
     "body-parser": "*",
-    "jsonwebtoken": "^8.3.0",
-    "mongoose": "*",
-    "lodash": "^4.17.11",
-    "nodemon": "^1.17.5",
     "connect-mongo": "^2.0.3",
     "cors": "^2.8.5",
     "dotenv": "^6.2.0",
+    "express": "*",
     "express-session": "^1.15.6",
+    "jsonwebtoken": "^8.3.0",
+    "lodash": "^4.17.11",
+    "mongoose": "*",
+    "nodemon": "^1.17.5",
     "passport": "^0.4.0",
+    "passport-google-oauth": "^1.0.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0"
   }
